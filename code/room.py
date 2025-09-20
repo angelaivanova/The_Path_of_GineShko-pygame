@@ -9,6 +9,9 @@ WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 800
 
 class Room:
+
+    DOOR_WIDTH = 20  # thickness of the door
+    DOOR_HEIGHT = 100  # length of the door
     def __init__(self, color, pos):
         self.color = color
         self.pos = pos
@@ -17,6 +20,7 @@ class Room:
         self.visited = False
         self.sprites = pygame.sprite.Group()
         self.doors = {}
+
 
     def update_doors(self, rooms_dict):
         cx, cy = self.pos
@@ -30,13 +34,19 @@ class Room:
         for direction, npos in neighbors.items():
             if npos in rooms_dict:
                 if direction == "up":
-                    rect = pygame.Rect(self.width//2 - DOOR_SIZE//2, 0, DOOR_SIZE, DOOR_SIZE)
+                    rect = pygame.Rect(self.width // 2 - self.DOOR_HEIGHT // 2, 0,
+                                       self.DOOR_HEIGHT, self.DOOR_WIDTH)
                 elif direction == "down":
-                    rect = pygame.Rect(self.width//2 - DOOR_SIZE//2, self.height - DOOR_SIZE, DOOR_SIZE, DOOR_SIZE)
+                    rect = pygame.Rect(self.width // 2 - self.DOOR_HEIGHT // 2,
+                                       self.height - self.DOOR_WIDTH, self.DOOR_HEIGHT,
+                                       self.DOOR_WIDTH)
                 elif direction == "left":
-                    rect = pygame.Rect(0, self.height//2 - DOOR_SIZE//2, DOOR_SIZE, DOOR_SIZE)
+                    rect = pygame.Rect(0, self.height // 2 - self.DOOR_HEIGHT // 2,
+                                       self.DOOR_WIDTH, self.DOOR_HEIGHT)
                 elif direction == "right":
-                    rect = pygame.Rect(self.width - DOOR_SIZE, self.height//2 - DOOR_SIZE//2, DOOR_SIZE, DOOR_SIZE)
+                    rect = pygame.Rect(self.width - self.DOOR_WIDTH,
+                                       self.height // 2 - self.DOOR_HEIGHT // 2,
+                                       self.DOOR_WIDTH, self.DOOR_HEIGHT)
                 self.doors[direction] = rect
 
     def spawn_enemies(self, player, bullet_group):
@@ -51,7 +61,9 @@ class Room:
     def draw(self, screen):
         screen.fill(self.color)
         for door in self.doors.values():
-            pygame.draw.rect(screen, (120,120,120), door)
+            border_rect = door.inflate(4, 4)  # 2px extra on all sides
+            pygame.draw.rect(screen, (100, 60, 20), border_rect, border_radius=5)  # dark border
+            pygame.draw.rect(screen, (180, 120, 60), door,border_radius=5)
         self.sprites.draw(screen)
 
     def check_doors(self, player, rooms_dict):
