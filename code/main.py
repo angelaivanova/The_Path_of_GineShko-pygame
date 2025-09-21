@@ -139,8 +139,6 @@ class Game:
 
             pygame.display.update()
 
-    import os
-    import random
 
     def game_over_screen(self):
         """Game Over menu with floating enemies, rounded buttons, and red theme"""

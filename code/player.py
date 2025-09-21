@@ -36,9 +36,9 @@ class Player(pygame.sprite.Sprite):
         # health
         self.max_health = 5
         self.health = self.max_health
-        self.invincible = False
-        self.invincible_time = 1.0
-        self.time_since_hit = 0.0
+        self.invincible = True
+        self.invincible_time = 2.0
+        self.time_since_hit = -2.0
 
         self.damage = 1
 
